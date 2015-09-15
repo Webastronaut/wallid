@@ -1,11 +1,11 @@
 {
-  "name": "dilav",
+  "name": "wallid",
   "version": "1.0.0",
   "description": "Angular inspired vanillaJS form validator",
-  "main": "dilav.js",
+  "main": "wallid.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Webastronaut/dilav.git"
+    "url": "https://github.com/Webastronaut/wallid.git"
   },
   "keywords": [
     "validator",
@@ -19,7 +19,7 @@
   "author": "Philip Morkisch",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Webastronaut/dilav/issues"
+    "url": "https://github.com/Webastronaut/wallid/issues"
   },
-  "homepage": "https://github.com/Webastronaut/dilav"
+  "homepage": "https://github.com/Webastronaut/wallid"
 }
