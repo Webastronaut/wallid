@@ -1,4 +1,6 @@
 (function (window, document, undefined) {
+  "use strict";
+  
 	var self = {
 			patterns: {
 				email: {
@@ -82,11 +84,10 @@
 	};
 
 	_.validatePattern = function (element, pattern) {
-		var errorIndex = element.$error.indexOf(pattern.classname);
-
-		regex = typeof pattern.regex === 'object' ?
-			new RegExp(pattern.regex) :
-			document.forms[element.$form].elements[pattern.regex].value;
+		var errorIndex = element.$error.indexOf(pattern.classname),
+				regex = typeof pattern.regex === 'object' ?
+          new RegExp(pattern.regex) :
+          document.forms[element.$form].elements[pattern.regex].value;
 
 		if ((typeof pattern.regex === 'object' && regex.test(element.value) === true) ||
 			element.value == regex) {
@@ -126,8 +127,7 @@
 
 	_.callValidator = function (event) {
 		var element = event.target,
-			elName = element.$name,
-			form = element.$form;
+			elName = element.$name;
 
 		if (element.readOnly) {
 			return;
@@ -161,9 +161,7 @@
 	};
 
 	_.extendFormElements = function () {
-		var forms = document.forms,
-			formObj,
-			form;
+		var forms = document.forms;
 
 		for (var i = 0, len = forms.length; i < len; i += 1) {
 
