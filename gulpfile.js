@@ -1,8 +1,10 @@
 var gulp = require('gulp'),
-	uglify = require('gulp-uglify');
+	uglify = require('gulp-uglify'),
+	rename = require('gulp-rename');
 
 gulp.task('default', function() {
 	return gulp.src('./wallid.js')
 		.pipe(uglify())
-		.pipe(gulp.dest('./wallid.min.js'));
+		.pipe(rename('wallid.min.js'))
+		.pipe(gulp.dest('./'));
 });	
