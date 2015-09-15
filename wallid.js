@@ -1,6 +1,6 @@
-(function (window, document, undefined) {
-  "use strict";
-  
+(function(window, document, undefined) {
+	"use strict";
+
 	var self = {
 			patterns: {
 				email: {
@@ -23,22 +23,22 @@
 		},
 		_ = {
 			methods: {
-				$setDirty: function () {
+				$setDirty: function() {
 					_.setState.call(this, 'add', 'is-dirty', '$dirty', true);
 				},
-				$unsetDirty: function () {
+				$unsetDirty: function() {
 					_.setState.call(this, 'remove', 'is-dirty', '$dirty', false);
 				},
-				$setValid: function () {
+				$setValid: function() {
 					_.setState.call(this, 'add', 'is-valid', '$valid', true);
 				},
-				$unsetValid: function () {
+				$unsetValid: function() {
 					_.setState.call(this, 'remove', 'is-valid', '$valid', false);
 				},
-				$setInvalid: function () {
+				$setInvalid: function() {
 					_.setState.call(this, 'add', 'is-invalid', '$invalid', true);
 				},
-				$unsetInvalid: function () {
+				$unsetInvalid: function() {
 					_.setState.call(this, 'remove', 'is-invalid', '$invalid', false);
 				}
 			},
@@ -57,7 +57,7 @@
 			}
 		};
 
-	_.extendObject = function (out) {
+	_.extendObject = function(out) {
 		out = out || {};
 
 		for (var i = 1; i < arguments.length; i++) {
@@ -75,7 +75,7 @@
 		return out;
 	};
 
-	_.setState = function (classMethod, className, prop, bool) {
+	_.setState = function(classMethod, className, prop, bool) {
 		if (prop && bool !== undefined) {
 			this[prop] = bool;
 		}
@@ -83,11 +83,11 @@
 		this.classList[classMethod](className);
 	};
 
-	_.validatePattern = function (element, pattern) {
+	_.validatePattern = function(element, pattern) {
 		var errorIndex = element.$error.indexOf(pattern.classname),
-				regex = typeof pattern.regex === 'object' ?
-          new RegExp(pattern.regex) :
-          document.forms[element.$form].elements[pattern.regex].value;
+			regex = typeof pattern.regex === 'object' ?
+			new RegExp(pattern.regex) :
+			document.forms[element.$form].elements[pattern.regex].value;
 
 		if ((typeof pattern.regex === 'object' && regex.test(element.value) === true) ||
 			element.value == regex) {
@@ -113,7 +113,7 @@
 		_.checkErrors(element);
 	};
 
-	_.checkErrors = function (element) {
+	_.checkErrors = function(element) {
 		if (element.$error.length) {
 			element.$setInvalid();
 			element.$unsetValid();
@@ -125,7 +125,7 @@
 		console.dir(element);
 	};
 
-	_.callValidator = function (event) {
+	_.callValidator = function(event) {
 		var element = event.target,
 			elName = element.$name;
 
@@ -160,7 +160,7 @@
 		}
 	};
 
-	_.extendFormElements = function () {
+	_.extendFormElements = function() {
 		var forms = document.forms;
 
 		for (var i = 0, len = forms.length; i < len; i += 1) {
@@ -204,7 +204,7 @@
 		}
 	};
 
-	self.init = function (patterns) {
+	self.init = function(patterns) {
 		self.patterns = _.extendObject(self.patterns, patterns);
 
 		_.extendFormElements();
