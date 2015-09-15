@@ -83,15 +83,15 @@
 		this.classList[classMethod](className);
 	};
 
-	_.validatePattern = function(element, pattern) {
+	_.validatePattern = function(element, pattern, isRegex) {
 		var errorIndex = element.$error.indexOf(pattern.classname),
-			regex = typeof pattern.regex === 'object' ?
-			new RegExp(pattern.regex) :
-			document.forms[element.$form].elements[pattern.regex].value;
+			regex = isRegex ?
+				new RegExp(pattern.regex) :
+				document.forms[element.$form].elements[pattern.regex].value;
 
-		if ((typeof pattern.regex === 'object' && regex.test(element.value) === true) ||
+		if ((isRegex && regex.test(element.value) === true) ||
 			element.value == regex) {
-			console.log('is valid');
+			// valid
 
 			_.setState.call(element, 'add', 'is-valid-' + pattern.classname);
 			_.setState.call(element, 'remove', 'is-invalid-' + pattern.classname);
@@ -100,7 +100,7 @@
 				element.$error.splice(errorIndex, 1);
 			}
 		} else {
-			console.log('is invalid');
+			// invalid
 
 			_.setState.call(element, 'add', 'is-invalid-' + pattern.classname);
 			_.setState.call(element, 'remove', 'is-valid-' + pattern.classname);
@@ -121,8 +121,6 @@
 			element.$setValid();
 			element.$unsetInvalid();
 		}
-
-		console.dir(element);
 	};
 
 	_.callValidator = function(event) {
@@ -141,22 +139,35 @@
 		  	_.validateLength(element);
 		  }*/
 
-		if (element.dataset.pattern) {
-			if (self.patterns[element.dataset.pattern] !== undefined) {
-				_.validatePattern(element, self.patterns[element.dataset.pattern]);
-			}
+		if (element.pattern) {
 
-			if (document.forms[element.$form].elements[element.dataset.pattern]) {
+			if (self.patterns[element.pattern] !== undefined) {
+				
+				_.validatePattern(element, self.patterns[element.pattern], true);
+				
+			} else if (document.forms[element.$form].elements[element.pattern]) {
+				
 				_.validatePattern(element, {
-					classname: document.forms[element.$form].elements[element.dataset.pattern].$name,
-					regex: element.dataset.pattern
+					classname: document.forms[element.$form].elements[element.pattern].$name,
+					regex: element.pattern
 				});
-			}
+				
+			} else {
 
-		} else {
-			if (self.patterns[element.type] !== undefined) {
-				_.validatePattern(element, self.patterns[element.type]);
+				_.validatePattern(element, {
+					classname: 'custom-pattern',
+					regex: element.pattern
+				}, true);
+				
 			}
+		} else {
+			
+			if (self.patterns[element.type] !== undefined) {
+				
+				_.validatePattern(element, self.patterns[element.type], true);
+				
+			}
+			
 		}
 	};
 
@@ -208,7 +219,6 @@
 		self.patterns = _.extendObject(self.patterns, patterns);
 
 		_.extendFormElements();
-		//console.log(document.forms);
 	};
 
 	return self;
