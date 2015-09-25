@@ -43,8 +43,11 @@
 				}
 			},
 			event: {
-				'INPUT': 'input',
-				'SELECT': 'change'
+				'input': 'input',
+                'textarea': 'input',
+				'select': 'change',
+                'radio': 'change',
+                'checkbox': 'change'
 			},
 			states: {
 				$dirty: false,
@@ -112,9 +115,16 @@
 
 		_.checkErrors(element);
 	};
+    
+    _.validateRequired = function(element) {
+        // todo: validation of radio/checkbox groups
+        console.log('no pattern, but required');
+        
+        _.checkErrors(element);
+    }
 
 	_.checkErrors = function(element) {
-		if (element.$error.length) {
+		if (element.$error && element.$error.length) {
 			element.$setInvalid();
 			element.$unsetValid();
 		} else {
@@ -167,12 +177,17 @@
 				_.validatePattern(element, self.patterns[element.type], true);
 				
 			}
+            
+            if (element.required) {
+                _.validateRequired(element);
+            }
 			
 		}
 	};
 
 	_.extendFormElements = function() {
-		var forms = document.forms;
+		var forms = document.forms,
+            event;
 
 		for (var i = 0, len = forms.length; i < len; i += 1) {
 
@@ -185,11 +200,21 @@
 			}
 
 			for (var j = 0, lenElements = forms[i].elements.length; j < lenElements; j += 1) {
+                console.dir(forms[i][forms[i].elements[j].name]);
 				forms[i][forms[i].elements[j].name].$name = forms[i].elements[j].name;
+                forms[i][forms[i].elements[j].name].$error = [];
 				forms[i][forms[i].elements[j].name].$required = forms[i][forms[i].elements[j].name].required;
 				forms[i][forms[i].elements[j].name].$form = forms[i].$name;
+                
+                if(forms[i].elements[j].tagName === 'INPUT') {
+                 	if(forms[i].elements[j].type === 'radio' || forms[i].elements[j].type === 'checkbox') {
+                        event = _.event[forms[i].elements[j].type];
+                    } else {
+                    	event = _.event[String.prototype.toLowerCase.call(forms[i].elements[j].tagName)];   
+                    }
+                }
 
-				forms[i].elements[j].addEventListener(_.event[forms[i].elements[j].nodeName], _.callValidator);
+				forms[i].elements[j].addEventListener(event, _.callValidator);
 
 				for (var state in _.states) {
 					if (_.states.hasOwnProperty(state)) {
