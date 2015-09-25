@@ -1,3 +1,4 @@
+// http://jsfiddle.net/wfhLc11L/104/
 (function(window, document, undefined) {
 	"use strict";
 
